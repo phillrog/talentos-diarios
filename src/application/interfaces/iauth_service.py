@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 class IAuthService(ABC):
     @abstractmethod
     def obter_url_login(self) -> str: pass
