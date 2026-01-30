@@ -1,0 +1,12 @@
+# Web Framework
+streamlit
+
+# Comunicação com APIs e OAuth2
+requests
+
+# Geração de Conteúdo (RSS e PDF)
+feedgen
+fpdf2
+
+# Utilidades e Manipulação de Dados
+python-dateutil

@@ -3,7 +3,7 @@
 from infrastructure.repositories.candidato_repository import CandidatoRepository
 
 
-class LimparCandidatosExpirados:
+class LimparCandidatosExpiradosService:
     def __init__(self, repo: CandidatoRepository):
         self.repo = repo
 
