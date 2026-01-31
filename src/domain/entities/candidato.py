@@ -9,6 +9,7 @@ class Candidato:
     perfil_url: str
     access_token: str
     data_cadastro: datetime
+    foto: str = None
     ativo: bool = True
 
     def esta_expirado(self) -> bool:

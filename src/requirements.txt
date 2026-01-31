@@ -10,3 +10,6 @@ fpdf2
 
 # Utilidades e Manipulação de Dados
 python-dateutil
+
+# Imagens
+pillow

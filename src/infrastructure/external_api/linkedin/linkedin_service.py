@@ -12,13 +12,14 @@ class LinkedInService(IAuthService):
         self.token_url = "https://www.linkedin.com/oauth/v2/accessToken"
         self.user_info_url = "https://api.linkedin.com/v2/userinfo" # API V2 para dados básicos
 
-    def obter_url_login(self) -> str:
-        # Define quais permissões (scopes) queremos: openid, profile, email
+    def obter_url_login(self, cargo="", link_perfil="") -> str:
+        state_combinado = f"{cargo}-*-{link_perfil}"
         params = {
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
             "scope": "openid profile email",
+            "state": state_combinado
         }
         request_url = requests.Request("GET", self.auth_url, params=params).prepare().url
         return request_url
@@ -35,7 +36,7 @@ class LinkedInService(IAuthService):
         response.raise_for_status()
         return response.json().get("access_token")
 
-    def obter_dados_perfil(self, token: str) -> dict:
+    def obter_dados_perfil(self, token: str, link_perfil: str) -> dict:
         headers = {"Authorization": f"Bearer {token}"}
         response = requests.get(self.user_info_url, headers=headers)
         response.raise_for_status()
@@ -45,6 +46,6 @@ class LinkedInService(IAuthService):
         return {
             "urn_id": dados.get("sub"), # O ID único no OpenID
             "nome": f"{dados.get('given_name')} {dados.get('family_name')}",
-            "perfil_url": f"https://www.linkedin.com/in/{dados.get('given_name')}-{dados.get('family_name')}".lower(), # Link aproximado
+            "perfil_url": link_perfil.lower(),
             "foto": dados.get("picture")
         }

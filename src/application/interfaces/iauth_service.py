@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class IAuthService(ABC):
     @abstractmethod
-    def obter_url_login(self) -> str: pass
+    def obter_url_login(self, cargo="", link_perfil="") -> str: pass
 
     @abstractmethod
     def obter_token_acesso(self, codigo_autorizacao: str) -> str: pass
