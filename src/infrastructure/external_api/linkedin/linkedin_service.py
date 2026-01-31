@@ -18,7 +18,7 @@ class LinkedInService(IAuthService):
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
-            "scope": "openid profile email",
+            "scope": "openid profile email w_member_social",
             "state": state_combinado
         }
         request_url = requests.Request("GET", self.auth_url, params=params).prepare().url
@@ -42,7 +42,6 @@ class LinkedInService(IAuthService):
         response.raise_for_status()
         dados = response.json()
         
-        # Mapeamos para um formato padrão da nossa aplicação
         return {
             "urn_id": dados.get("sub"), # O ID único no OpenID
             "nome": f"{dados.get('given_name')} {dados.get('family_name')}",

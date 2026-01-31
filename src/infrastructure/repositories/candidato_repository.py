@@ -7,7 +7,7 @@ from domain.interfaces.icandidato_repository import ICandidatoRepository
 
 
 class CandidatoRepository(ICandidatoRepository):
-    def __init__(self, file_path: str = "candidatos.json"):
+    def __init__(self, file_path: str = "./src/static/candidatos.json"):
         self.file_path = file_path
 
     def _ler_arquivo(self) -> list:
@@ -19,7 +19,7 @@ class CandidatoRepository(ICandidatoRepository):
     def salvar(self, candidato: Candidato):
         candidatos = self._ler_arquivo()
 
-        candidatos = [c for c in candidatos if c['urn_id'] != candidato.urn_id]
+        candidatos = [c for c in candidatos if c['perfil_url'] != candidato.perfil_url]
         candidatos.append(candidato.to_dict())
         with open(self.file_path, 'w', encoding='utf-8') as f:
             json.dump(candidatos, f, indent=4, ensure_ascii=False)
@@ -28,8 +28,8 @@ class CandidatoRepository(ICandidatoRepository):
         dados = self._ler_arquivo()
         return [Candidato.from_dict(d) for d in dados]
 
-    def remover(self, urn_id: str):
+    def remover(self, perfil_url: str):
         candidatos = self._ler_arquivo()
-        candidatos = [c for c in candidatos if c['urn_id'] != urn_id]
+        candidatos = [c for c in candidatos if c['perfil_url'] != perfil_url]
         with open(self.file_path, 'w', encoding='utf-8') as f:
             json.dump(candidatos, f, indent=4, ensure_ascii=False)

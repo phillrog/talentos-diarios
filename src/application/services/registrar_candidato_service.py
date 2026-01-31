@@ -34,11 +34,9 @@ class RegistrarCandidatoService:
         
         # Cria a entidade
         novo_candidato = Candidato(
-            urn_id=perfil['urn_id'],
             nome=perfil['nome'],
             cargo=cargo_informado, # O cargo a pessoa digita no Streamlit
             perfil_url=perfil['perfil_url'],
-            access_token=token,
             data_cadastro=datetime.now(),
             foto=foto_base64
         )

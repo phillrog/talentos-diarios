@@ -3,11 +3,9 @@ from datetime import datetime, timedelta
 
 @dataclass
 class Candidato:
-    urn_id: str
     nome: str
     cargo: str
     perfil_url: str
-    access_token: str
     data_cadastro: datetime
     foto: str = None
     ativo: bool = True

@@ -13,3 +13,6 @@ python-dateutil
 
 # Imagens
 pillow
+
+# secrets
+python-dotenv
