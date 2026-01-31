@@ -1,5 +1,6 @@
 import locale
 import base64
+import os
 from io import BytesIO
 from PIL import Image, ImageOps, ImageDraw
 from fpdf import FPDF
@@ -13,208 +14,195 @@ except:
 
 class GeradorPDFService(IDocumentoService):
     def gerar(self, candidatos: list):
-        pdf = FPDF(orientation='P', unit='mm', format=(200, 200))
+        # Paleta Dark Tech
+        COLOR_BG = (34, 40, 49)      # #222831
+        COLOR_CARD = (57, 62, 70)    # #393E46
+        COLOR_ACCENT = (0, 173, 181) # #00ADB5
+        COLOR_TEXT = (238, 238, 238) # #EEEEEE
+
+        class PDF(FPDF):
+            def footer(self):
+                # Mensagem de instrução para LinkedIn
+                self.set_y(-15)
+                self.set_font("Helvetica", 'I', 12)
+                self.set_text_color(*COLOR_ACCENT)
+                self.cell(0, 5, "Arraste para o lado para ver mais profissionais >>>", align='C', ln=True)
+                
+                # Numeração da Página
+                self.set_font("Helvetica", 'I', 8)
+                self.set_text_color(100, 100, 100)
+                self.cell(0, 5, f"Página {self.page_no()} de {{nb}}", align='C')
+        pdf = PDF(orientation='P', unit='mm', format=(200, 200))
+        pdf.set_auto_page_break(auto=True, margin=20)
+        pdf.alias_nb_pages() # Para o total de páginas {nb}
         
         agora = datetime.now()
-        data_atual = agora.strftime("%A, %d DE %B DE %Y").upper()
-        versao = "EDIÇÃO V.1.0.0"
+        data_atual = agora.strftime("%d DE %B DE %Y").upper()
         total_talentos = len(candidatos)
-        
-        def adicionar_cabecalho_pagina():
-            import os
-            # 1. Fundo do papel jornal
-            pdf.set_fill_color(252, 251, 247)
+
+        def adicionar_estilo_base():
+            # Fundo Principal
+            pdf.set_fill_color(*COLOR_BG)
             pdf.rect(0, 0, 200, 200, 'F')
             
-            titulo = "Talentos Diários"
-            pdf.set_font("Times", 'B', 32)
-            largura_texto = pdf.get_string_width(titulo)
-            largura_logo = 18 
-            espacamento_interno = 5 
+            #  Moldura Externa da Página
+            pdf.set_draw_color(57, 62, 70)
+            pdf.set_line_width(0.3)
+            pdf.rect(5, 5, 190, 190, 'D') # Moldura a 5mm da borda
             
-            largura_total_bloco = largura_logo + espacamento_interno + largura_texto
-            x_inicio = (200 - largura_total_bloco) / 2
-            y_pos = 8 
+            # Círculo decorativo mantido
+            pdf.set_draw_color(45, 50, 58)
+            pdf.ellipse(120, -20, 100, 100, 'D')
 
-            # 2. Processar a Logo para ficar REDONDA
+        def adicionar_cabecalho(is_first=False):
+            # --- ÁREA DO TÍTULO E LOGO ---
+            pdf.set_font("Helvetica", 'B', 20)
+            pdf.set_text_color(*COLOR_TEXT)
+            pdf.set_xy(15, 10)
+            pdf.cell(40, 10, "TALENTOS", align='L')
+            pdf.set_text_color(*COLOR_ACCENT)
+            pdf.cell(40, 10, "DIÁRIOS", align='L')
+
+            # Linha vertical divisória ao lado do título
+            pdf.set_draw_color(*COLOR_ACCENT)
+            pdf.set_line_width(0.5)
+            pdf.line(100, 11, 100, 19)
+            
+            pdf.set_xy(105, 13)
+            pdf.set_font("Helvetica", 'B', 12)
+            pdf.set_text_color(*COLOR_ACCENT)
+            pdf.cell(0, 5, "NOVO DIÁRIO PUBLICADO!", ln=True)
+
+            # Logo
             try:
                 dir_atual = os.path.dirname(os.path.abspath(__file__))
                 caminho_logo = os.path.normpath(os.path.join(dir_atual, "..", "..", "assets", "images", "logo.png"))
-                
                 if os.path.exists(caminho_logo):
-                    # Abre a imagem com Pillow para arredondar
-                    img_logo = Image.open(caminho_logo).convert("RGBA")
-                    
-                    # Torna a logo quadrada (proporção 1:1)
-                    tamanho_min = min(img_logo.size)
-                    img_logo = ImageOps.fit(img_logo, (tamanho_min, tamanho_min), centering=(0.5, 0.5))
-                    
-                    # Cria a máscara circular
-                    mask = Image.new('L', img_logo.size, 0)
+                    img = Image.open(caminho_logo).convert("RGBA")
+                    tamanho = min(img.size)
+                    img = ImageOps.fit(img, (tamanho, tamanho), centering=(0.5, 0.5))
+                    mask = Image.new('L', img.size, 0)
                     draw = ImageDraw.Draw(mask)
-                    draw.ellipse((0, 0) + img_logo.size, fill=255)
-                    
-                    # Aplica a máscara e coloca fundo cor de papel (para não dar erro de transparência no FPDF)
-                    logo_redonda = Image.new("RGB", img_logo.size, (252, 251, 247))
-                    logo_redonda.paste(img_logo, mask=mask)
-                    
-                    # Insere a logo já arredondada no PDF
-                    pdf.image(logo_redonda, x=x_inicio, y=y_pos - 2, w=largura_logo)
-            except Exception as e:
-                print(f"Erro ao arredondar logo: {e}")
-
-            # 3. Título Principal
-            pdf.set_text_color(18, 18, 18)
-            pdf.set_xy(x_inicio + largura_logo + espacamento_interno, y_pos)
-            pdf.cell(largura_texto, 15, titulo, ln=True, align='L')
+                    draw.ellipse((0, 0) + img.size, fill=255)
+                    logo_round = Image.new("RGB", img.size, COLOR_BG)
+                    logo_round.paste(img, mask=mask)
+                    pdf.image(logo_round, x=170, y=6.5, w=14)
+            except: pass
             
-            # 4. Linhas de Estilo
-            pdf.set_line_width(0.6)
-            pdf.line(14, 28, 191, 28)
-            pdf.set_font("Times", 'I', 9)
-            pdf.set_xy(0, 29)
-            pdf.cell(0, 5, f"{data_atual} | {versao}", ln=True, align='C')
-            pdf.line(14, 35, 191, 35)
+            # --- LINHAS ESTRUTURAIS ---
+            pdf.set_draw_color(*COLOR_CARD)
+            pdf.set_line_width(0.2)
+            
 
-        # --- 1. CAPA ---
-        pdf.add_page()
-        adicionar_cabecalho_pagina()
-        
-        num_texto = str(total_talentos)
+            pdf.set_xy(15, 25)
+            pdf.set_font("Helvetica", '', 12)
+            pdf.set_text_color(180, 180, 180)
+            pdf.cell(0, 4, f"Apresentamos {total_talentos} profissionais qualificados para sua empresa.", ln=True)
+            
+
+            pdf.set_draw_color(*COLOR_CARD)
                 
-        pdf.set_font("Times", 'B', 14)
-        pdf.set_text_color(100, 100, 100)
-        pdf.set_xy(0, 44)
-        # O largura '0' faz a célula ocupar toda a largura disponível, permitindo o align='C'
-        pdf.cell(0, 10, "TOTAL DE PROFISSIONAIS DISPONÍVEIS HOJE", ln=True, align='C')
-    
-        
-        # 2. Configurações do Número (Badge)
-        num_texto = str(total_talentos)
-        pdf.set_font("Times", 'B', 28)
-        
-        # Cálculo para centralizar o retângulo do badge
-        largura_num = pdf.get_string_width(num_texto) + 12 # Número + margens laterais
-        altura_badge = 14
-        x_badge = (200 - largura_num) / 2  # Centralização matemática no papel de 200mm
-        y_badge = 66
-        
-        # 3. Desenhar o Background (Badge)
-        pdf.set_fill_color(18, 18, 18)
-        pdf.rect(x_badge, y_badge, largura_num, altura_badge, 'F')
-        
-        # 4. Escrever o Número dentro do Badge (Centralizado)
-        pdf.set_text_color(255, 255, 255)
-        pdf.set_xy(x_badge, y_badge)
-        pdf.cell(largura_num, altura_badge, num_texto, ln=True, align='C')
-        
-        # 5. Título Inferior
-        pdf.set_xy(0, 90)
-        pdf.set_font("Times", 'B', 20)
-        pdf.set_text_color(0, 0, 0)
-        pdf.cell(0, 15, "OPORTUNIDADES EM DESTAQUE", ln=True, align='C')
-        
-        pdf.set_font("Times", 'I', 12)
-        pdf.set_text_color(80, 80, 80)
-        pdf.cell(0, 10, "Arraste para o lado e confira os profissionais >>", ln=True, align='C')
+            pdf.line(15, 22, 185, 22)
 
-        # --- 2. GRID DE CLASSIFICADOS (6 CARDS POR PÁGINA) ---
+        # Configurações do Grid ajustadas para caber 6 na primeira página
         cards_por_pagina = 6
         colunas = 3
-        largura_card = 58
-        altura_card = 75
-        x_inicial = 13
-        y_inicial = 38
-        espacamento = 2
+        largura_card = 56
+        altura_card = 70 
+        x_inicial = 14
+        y_primeira_pagina = 35 # Espaço para o cabeçalho maior
+        y_outras_paginas = 35
+        espacamento_x = 4
+        espacamento_y = 4
 
         chunks = [candidatos[i:i + cards_por_pagina] for i in range(0, len(candidatos), cards_por_pagina)]
 
-        for grupo in chunks:
+        for p_idx, grupo in enumerate(chunks):
             pdf.add_page()
-            adicionar_cabecalho_pagina()
+            adicionar_estilo_base()
             
-            for i in range(cards_por_pagina):
+            is_first = (p_idx == 0)
+            adicionar_cabecalho(is_first=is_first)
+            
+            y_offset = y_primeira_pagina if is_first else y_outras_paginas
+
+            for i, c in enumerate(grupo):
                 col = i % colunas
                 row = i // colunas
+                x = x_inicial + (col * (largura_card + espacamento_x))
+                y = y_offset + (row * (altura_card + espacamento_y))
                 
-                x = x_inicial + (col * (largura_card + espacamento))
-                y = y_inicial + (row * (altura_card + espacamento))
+                # Card
+                pdf.set_fill_color(*COLOR_CARD)
+                pdf.rect(x, y, largura_card, altura_card, 'F')
                 
-                # Borda do Card
-                pdf.set_draw_color(150, 150, 150)
-                pdf.set_line_width(0.2)
-                pdf.rect(x, y, largura_card, altura_card)
-
-                if i < len(grupo):
-                    c = grupo[i]
-                    # Cabeçalho do Card: CARGO
-                    pdf.set_fill_color(240, 240, 240)
-                    pdf.rect(x, y, largura_card, 18, 'F')
-                    pdf.set_xy(x + 2, y + 4)
-                    pdf.set_font("Times", 'B', 8)
-                    pdf.set_text_color(40, 40, 40)
-                    pdf.multi_cell(largura_card - 4, 4, c['cargo'].upper(), align='C')
-
-                    # --- FOTO EM BASE64 (REDONDA E COM MARGEM) ---
-                    # Margem de 3mm após o cabeçalho cinza (y+18+3 = y+21)
-                    diametro_foto = 24 
-                    x_foto = x + (largura_card - diametro_foto) / 2
-                    y_foto = y + 21 
-                    
-                    if c.get('foto'):
-                        try:
-                            img_str = c['foto']
-                            if "," in img_str:
-                                img_str = img_str.split(",")[1]
-                            
-                            img_data = base64.b64decode(img_str)
-                            img_pill = Image.open(BytesIO(img_data)).convert("RGBA")
-                            
-                            # Mantém a proporção 1:1 para o círculo perfeito
-                            tamanho_min = min(img_pill.size)
-                            img_pill = ImageOps.fit(img_pill, (tamanho_min, tamanho_min), centering=(0.5, 0.5))
-                            
-                            # Cria máscara circular
-                            mask = Image.new('L', img_pill.size, 0)
-                            draw = ImageDraw.Draw(mask)
-                            draw.ellipse((0, 0) + img_pill.size, fill=255)
-                            
-                            # Aplica máscara e converte para RGB com fundo do papel
-                            img_circular = Image.new("RGB", img_pill.size, (252, 251, 247))
-                            img_circular.paste(img_pill, mask=mask)
-                            
-                            pdf.image(img_circular, x=x_foto, y=y_foto, w=diametro_foto)
-                        except Exception as e:
-                            print(f"Erro ao processar imagem de {c['nome']}: {e}")
-                            pdf.set_draw_color(230, 230, 230)
-                            pdf.rect(x_foto, y_foto, diametro_foto, diametro_foto)
-                            
-                    # Corpo do Card: NOME (Posicionado logo abaixo da foto circular)
-                    pdf.set_xy(x + 2, y + 47) 
-                    pdf.set_font("Times", 'B', 11)
-                    pdf.set_text_color(0, 0, 0)
-                    pdf.multi_cell(largura_card - 4, 5, c['nome'].title(), align='C')
-                    
-                    # Descrição Curta (Mantido conforme original)
-                    pdf.set_font("Times", '', 8)
-                    pdf.set_text_color(80, 80, 80)
-                    pdf.set_x(x + 2)
-                    pdf.ln(2)
-                    pdf.set_x(x + 2)
-                    pdf.multi_cell(largura_card - 4, 3.5, "Disponível para novas conexões estratégicas.", align='C')
-
-                    # Rodapé: LINK (Mantido conforme original)
-                    pdf.set_xy(x, y + altura_card - 10)
-                    pdf.set_font("Times", 'B', 7)
-                    pdf.set_text_color(0, 0, 255)
-                    pdf.cell(largura_card, 10, "PERFIL LINKEDIN", link=c['perfil_url'], border='T', align='C')
+                # --- CABEÇALHO DO CARD ---
+                pdf.set_fill_color(45, 50, 58)
+                altura_bloco_header = 16
+                pdf.rect(x, y, largura_card, altura_bloco_header, 'F')
+                
+                pdf.set_font("Helvetica", 'B', 8)
+                pdf.set_text_color(*COLOR_ACCENT)
+                
+                # Cargo
+                texto_cargo = c['cargo'][:80].upper()
+                largura_util = largura_card - 4
+                altura_linha = 3.5
+                
+                # Calcular largura real para saber o número de linhas exato
+                largura_texto_total = pdf.get_string_width(texto_cargo)
+                import math
+                num_linhas = math.ceil(largura_texto_total / largura_util)
+                
+                # Se o texto for muito longo  limita a altura
+                altura_total_texto = num_linhas * altura_linha
+                
+                # LÓGICA DE ALINHAMENTO DINÂMICO:
+                # Se tiver 1 linha: Fica no centro perfeito.
+                # Se tiver mais linhas: O offset diminui proporcionalmente para o topo.
+                if num_linhas == 1:
+                    offset_vertical = (altura_bloco_header - altura_total_texto) / 2
                 else:
-                    # ESPAÇO DISPONÍVEL
-                    pdf.set_xy(x, y + (altura_card / 2) - 5)
-                    pdf.set_font("Times", 'I', 10)
-                    pdf.set_text_color(180, 180, 180)
-                    pdf.cell(largura_card, 10, "ESPAÇO DISPONÍVEL", align='C')
-                    pdf.set_text_color(0)
+                    # offset menor)
+                    offset_vertical = (altura_bloco_header - altura_total_texto) * 0.4 
+                
+                pdf.set_xy(x + 2, y + max(1, offset_vertical))
+                pdf.multi_cell(largura_util, altura_linha, texto_cargo, align='J')
+                
+                # --- CORPO DO CARD (BORDA AO REDOR DA FOTO E NOME) ---
+                pdf.set_draw_color(80, 85, 90) 
+                pdf.set_line_width(0.2)                
+                pdf.rect(x + 2, y + 18, largura_card - 4, altura_card - 28, 'D')
 
-        pdf.output("jornal_talentos.pdf")
-        print("✅ PDF gerado com fotos redondas e estrutura de 159 linhas preservada.")
+                # Foto 
+                if c.get('foto'):
+                    try:
+                        img_str = c['foto'].split(",")[1] if "," in c['foto'] else c['foto']
+                        img_data = base64.b64decode(img_str)
+                        img_pill = Image.open(BytesIO(img_data)).convert("RGBA")
+                        img_pill = ImageOps.fit(img_pill, (200, 200), centering=(0.5, 0.5))
+                        mask = Image.new('L', img_pill.size, 0)
+                        draw = ImageDraw.Draw(mask)
+                        draw.ellipse((0, 0, 200, 200), fill=255)
+                        img_circ = Image.new("RGB", img_pill.size, COLOR_CARD)
+                        img_circ.paste(img_pill, mask=mask)
+
+                        pdf.image(img_circ, x=x+18, y=y+21, w=20)
+                    except: pass
+
+                # Nome
+                pdf.set_xy(x + 3, y + 43)
+                pdf.set_font("Helvetica", 'B', 11)
+                pdf.set_text_color(*COLOR_TEXT)
+                pdf.multi_cell(largura_card - 6, 4.5, c['nome'].title(), align='C')
+
+                # Botão
+                pdf.set_fill_color(*COLOR_ACCENT)
+                pdf.rect(x + 2, y + altura_card - 8, 52, 5, 'F')
+                pdf.set_xy(x, y + altura_card - 8)
+                pdf.set_font("Helvetica", 'B', 10)
+                pdf.set_text_color(*COLOR_BG)
+                pdf.cell(largura_card, 5, "VER PERFIL", link=c['perfil_url'], align='C')
+
+        pdf.output("talentos_diarios.pdf")
+        print("✅ PDF ajustado com paginação e grid corrigido!")
