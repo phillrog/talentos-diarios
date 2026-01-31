@@ -46,8 +46,24 @@ def renderizar_interface(registrar_service, auth_service):
         # LÓGICA DE REDIRECIONAMENTO 
         if cargo_digitado and link_perfil:
             url_final = auth_service.obter_url_login(cargo_digitado, link_perfil)            
-            st.link_button("Entrar com LinkedIn", url_final, use_container_width=True)            
-            st.info("Clique no botão acima para autorizar via LinkedIn.")
+            st.markdown(f"""
+                <a href="{url_final}" target="_self" style="text-decoration: none;">
+                    <div style="
+                        background-color: #ff4b4b; 
+                        color: white; 
+                        padding: 0.5rem 1rem; 
+                        text-align: center; 
+                        border-radius: 0.5rem; 
+                        font-family: sans-serif;
+                        font-weight: 500;
+                        cursor: pointer;
+                        border: 1px solid #ff4b4b;
+                        transition: opacity 0.2s;
+                    " onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                        🚀 Confirmar Registro com LinkedIn
+                    </div>
+                </a>
+            """, unsafe_allow_html=True)
         else:
             st.button("Entrar com LinkedIn", use_container_width=True, disabled=True)
             st.caption("Preencha os campos acima para liberar o acesso.")
