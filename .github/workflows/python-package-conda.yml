@@ -12,7 +12,8 @@ permissions:
 jobs:
   processar-jornal:
     runs-on: ubuntu-latest
-
+    environment: Desenvolvimento
+    
     steps:
       - name: 1. Checkout do Repositório
         uses: actions/checkout@v4
@@ -40,12 +41,8 @@ jobs:
 
       - name: 4. Executar Orquestrador (Main)
         env:
-          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/src
-          # Variáveis para o seu obter_config() funcionar no Actions
-          LINKEDIN_PAGE_ACCESS_TOKEN: ${{ secrets.LINKEDIN_PAGE_ACCESS_TOKEN }}
-          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
-          APP_URL: "https://talentos-diarios.streamlit.app"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/src          
+          APP_URL: "https://talentos-diarios.streamlit.app"          
           ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
           ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
           ONESIGNAL_TEMPLATE_ID: ${{ secrets.ONESIGNAL_TEMPLATE_ID }}
