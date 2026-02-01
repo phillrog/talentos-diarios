@@ -12,22 +12,36 @@ def renderizar_interface(registrar_service, auth_service):
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
         <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
+        window.OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
             appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
-            allowLocalhostAsSecureOrigin: true,
-            notifyButton: {
-                enable: true,
-                position: 'bottom-right',
-                size: 'medium'
-            },
-            serviceWorkerParam: { scope: "/" },
-            serviceWorkerPath: "static/OneSignalSDKWorker.js",
+            // Adicione esta linha abaixo para ajudar em ambientes de iframe
+            allowLocalhostAsSecureOrigin: true, 
             });
         });
+
+        function dispararPrompt() {
+            window.OneSignalDeferred.push(function(OneSignal) {
+                // Tenta abrir o prompt mesmo dentro do iframe
+                OneSignal.Slidedown.promptPush();
+            });
+        }
         </script>
+        <div style="display: flex; justify-content: center;">
+            <button onclick="dispararPrompt()" style="
+                background-color: #ff4b4b; 
+                color: white; 
+                border: none; 
+                padding: 10px 20px; 
+                border-radius: 8px; 
+                cursor: pointer;
+                font-weight: bold;
+                width: 100%;">
+                🔔 Ativar Notificações de Vagas
+            </button>
+        </div>
         """,
-        height=100,
+        height=60,
     )
     
     st.title("📰 Talentos Diários")
