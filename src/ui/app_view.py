@@ -33,25 +33,14 @@ def renderizar_interface(registrar_service, auth_service):
             except Exception as e:
                 st.error(f"Erro no registro: {e}")
 
-    with st.expander("🔔 Receber alertas de novos candidatos"):
-        st.write("Deseja ser avisado quando o jornal for atualizado?")
-        components.html(
-                """
-                <script>
-                window.OneSignalDeferred = window.OneSignalDeferred || [];
-                window.OneSignalDeferred.push(async function(OneSignal) {
-                    await OneSignal.init({
-                        appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
-                    });
-                    OneSignal.Notifications.requestPermission();
-                });
-                </script>
-                """,
-                height=0,
-            )
-        url_final = "https://talentos-diarios.os.tc/subscribe"
-        if st.link_button("👉 Abrir Página de Inscrição", url_final, use_container_width=True):                       
-            st.success("Verifique a barra de endereços para permitir!")
+    with st.expander("🔔 Receber Alertas (Via ntfy)"):
+        st.write("Usamos o ntfy para notificações rápidas e gratuitas.")
+        
+        topico = "talentos_diarios_2026" # ESCOLHA UM NOME ÚNICO AQUI
+        url_ntfy = f"https://ntfy.sh/{topico}"
+        
+        st.link_button("👉 Abrir Painel de Notificações", url_ntfy)
+        st.caption("Ao abrir o link, clique em 'Subscribe' para receber alertas neste navegador ou celular.")
             
     # Área de Registro
     with st.container(border=True):
