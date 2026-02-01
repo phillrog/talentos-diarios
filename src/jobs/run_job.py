@@ -22,9 +22,9 @@ def obter_config(chave):
     
 def disparar_onesignal():
 
-    app_id = os.getenv("ONESIGNAL_APP_ID")
-    api_key = os.getenv("ONESIGNAL_REST_API_KEY")
-    template_id = os.getenv("ONESIGNAL_TEMPLATE_ID")
+    app_id = obter_config("ONESIGNAL_APP_ID")
+    api_key = obter_config("ONESIGNAL_REST_API_KEY")
+    template_id = obter_config("ONESIGNAL_TEMPLATE_ID")
 
     if not app_id or not api_key:
         print("⚠️ OneSignal ignorado: Chaves não encontradas.")
