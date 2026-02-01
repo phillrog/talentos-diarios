@@ -35,8 +35,7 @@ def renderizar_interface(registrar_service, auth_service):
 
     with st.expander("🔔 Receber alertas de novos candidatos"):
         st.write("Deseja ser avisado quando o jornal for atualizado?")
-        if st.button("Ativar Notificações no Navegador", use_container_width=True):
-            components.html(
+        components.html(
                 """
                 <script>
                 window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -50,7 +49,10 @@ def renderizar_interface(registrar_service, auth_service):
                 """,
                 height=0,
             )
+        url_final = "https://talentos-diarios.os.tc/subscribe"
+        if st.link_button("👉 Abrir Página de Inscrição", url_final, use_container_width=True):                       
             st.success("Verifique a barra de endereços para permitir!")
+            
     # Área de Registro
     with st.container(border=True):
         st.write("### 🚀 Apareça para os recrutadores")
