@@ -12,14 +12,40 @@ def renderizar_interface(registrar_service, auth_service):
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
         <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-            appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
+        
+        // Criamos uma variável global para controlar se já inicializou nesta sessão
+        if (!window.jaInicializado) {
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                await OneSignal.init({
+                appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
+                allowLocalhostAsSecureOrigin: true
+                });
+                window.jaInicializado = true; // Marca como inicializado
+                console.log("OneSignal inicializado com sucesso.");
             });
-        });
+        } else {
+            console.log("OneSignal já estava rodando, pulando novo init.");
+        }
+
+        function dispararPrompt() {
+            window.OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.Slidedown.promptPush();
+            });
+        }
         </script>
+        <button onclick="dispararPrompt()" style="
+            background-color: #E11D48; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%;
+            font-weight: bold;">
+            🔔 Ativar Notificações no Navegador
+        </button>
         """,
-        height=100,
+        height=60,
     )
     
     st.title("📰 Talentos Diários")
