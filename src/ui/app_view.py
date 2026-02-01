@@ -4,49 +4,20 @@ import streamlit.components.v1 as components
 
 
 def renderizar_interface(registrar_service, auth_service):
-    st.set_page_config(page_title="Talentos Diários", page_icon="📰")
-
+    st.set_page_config(page_title="Talentos Diários", page_icon="📰")        
     
-    components.html(
-        """
-        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-        <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        
-        // Criamos uma variável global para controlar se já inicializou nesta sessão
-        if (!window.jaInicializado) {
-            window.OneSignalDeferred.push(async function(OneSignal) {
-                await OneSignal.init({
-                appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
-                allowLocalhostAsSecureOrigin: true
-                });
-                window.jaInicializado = true; // Marca como inicializado
-                console.log("OneSignal inicializado com sucesso.");
-            });
-        } else {
-            console.log("OneSignal já estava rodando, pulando novo init.");
-        }
+    st.write("---")
+    st.subheader("🔔 Receba Alertas de Vagas")
+    st.write("O Streamlit bloqueia notificações diretas. Clique no botão abaixo para abrir a página de inscrição oficial:")
 
-        function dispararPrompt() {
-            window.OneSignalDeferred.push(function(OneSignal) {
-            OneSignal.Slidedown.promptPush();
-            });
-        }
-        </script>
-        <button onclick="dispararPrompt()" style="
-            background-color: #E11D48; 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 100%;
-            font-weight: bold;">
-            🔔 Ativar Notificações no Navegador
-        </button>
-        """,
-        height=60,
-    )
+    # Este link usa o seu App ID e abre a página de "emergência" que o OneSignal cria
+    link_inscricao = "https://66267c67-6b67-4742-a72d-25c884d2fe17.os.tc/subscribe"
+
+    if st.button("Configurar Notificações", use_container_width=True, type="primary"):
+        # Abre o link em uma nova aba para garantir que o domínio seja aceito
+        js = f"window.open('{link_inscricao}', '_blank');"
+        st.components.v1.html(f"<script>{js}</script>", height=0)
+        st.success("Página de inscrição aberta em uma nova aba!")
     
     st.title("📰 Talentos Diários")
     st.subheader("Sua vitrine diária para o mercado de trabalho")
