@@ -7,6 +7,8 @@ import os
 from dotenv import load_dotenv
 import streamlit as st
 import requests
+import onesignal
+from onesignal.configuration import Configuration
 
 load_dotenv()
 
@@ -18,19 +20,6 @@ def obter_config(chave):
         # Se falhar, pega das variáveis de ambiente (arquivo .env ou GitHub Secrets)
         return os.getenv(chave)
     
-def obter_id():
-    access_token = obter_config("LINKEDIN_PAGE_ACCESS_TOKEN")
-    url = "https://api.linkedin.com/v2/userinfo"
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        user_data = response.json()
-        user_id = user_data.get("sub") # ESSE É O CARA!
-        print(f"Seu ID real para o secrets: {user_id}")
-    else:
-        print(f"Erro: {response.status_code} - {response.text}")
-        
 def disparar_onesignal():
 
     app_id = os.getenv("ONESIGNAL_APP_ID")

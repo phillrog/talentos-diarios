@@ -19,3 +19,6 @@ python-dotenv
 
 # acesso repositorios GitHub
 PyGithub
+
+# OneSignal API
+onesignal-python-api
