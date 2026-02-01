@@ -16,7 +16,9 @@ def renderizar_interface(registrar_service, auth_service):
             await OneSignal.init({
             appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
             notifyButton: {
-                enable: true, # Isso vai mostrar o "Sininho" vermelho no canto
+                enable: true,
+                position: 'bottom-right',
+                size: 'medium'
             },
             serviceWorkerParam: { scope: "/" },
             serviceWorkerPath: "static/OneSignalSDKWorker.js",
