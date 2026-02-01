@@ -54,9 +54,9 @@ jobs:
           git config --global user.email 'action@github.com'
           
           # Adiciona o JSON atualizado, o XML do feed e o PDF
-          git add src/static/candidatos.json
-          git add src/static/feed.xml
-          git add src/static/talentos_diarios.pdf
+          git add src/static/*.json || echo "Nenhum JSON para adicionar"
+          git add src/static/*.xml || echo "Nenhum XML para adicionar"
+          git add src/static/*.pdf || echo "Nenhum PDF para adicionar"
           
           # Só faz o commit se houver mudanças reais para evitar erro de "nothing to commit"
           git diff --quiet && git diff --staged --quiet || (git commit -m "bot: atualizando jornal e candidatos [skip ci]" && git push)
