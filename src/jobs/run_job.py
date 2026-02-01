@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 import streamlit as st
 import requests
 import onesignal
-from onesignal.configuration import Configuration
+from onesignal.api import default_api
+from onesignal.model.generic_error import GenericError
+from onesignal.model.notification import Notification
+from onesignal.model.create_notification_success_response import CreateNotificationSuccessResponse
+from pprint import pprint
 
 load_dotenv()
 
@@ -21,7 +25,6 @@ def obter_config(chave):
         return os.getenv(chave)
     
 def disparar_onesignal():
-
     app_id = obter_config("ONESIGNAL_APP_ID")
     api_key = obter_config("ONESIGNAL_REST_API_KEY")
     template_id = obter_config("ONESIGNAL_TEMPLATE_ID")
@@ -30,20 +33,32 @@ def disparar_onesignal():
         print("⚠️ OneSignal ignorado: Chaves não encontradas.")
         return
 
-    url = "https://onesignal.com/api/v1/notifications"
-    headers = {
-        "Authorization": f"Basic {api_key}",
-        "Content-Type": "application/json; charset=utf-8"
-    }
-    payload = {
-        "app_id": app_id,
-        "template_id": template_id,
-        "included_segments": ["All"]
-    }
+    # --- 1. CONFIGURAÇÃO (Aqui estava o erro: era Configuration, não Notification) ---
+    configuration = onesignal.Configuration(
+        app_key = api_key
+    )
 
-    response = requests.post(url, headers=headers, json=payload)
-    print(f"📡 OneSignal: {response.status_code} - {response.text}")        
+    # --- 2. CLIENTE API ---
+    with onesignal.ApiClient(configuration) as api_client:
+        api_instance = default_api.DefaultApi(api_client)
+        
+        # --- 3. MONTAGEM DA NOTIFICAÇÃO ---
+        notification = Notification(
+            app_id = app_id,
+            template_id = template_id,
+            included_segments = ["Total Subscriptions"] 
+        )
 
+        try:
+            # --- 4. ENVIO ---
+            api_response = api_instance.create_notification(notification)
+            print("📡 Resposta do OneSignal:")
+            pprint(api_response)
+        except onesignal.ApiException as e:
+            print(f"❌ Erro ao chamar OneSignal: {e}")
+            # Se der erro de 'id', é porque não há inscritos
+
+            
 if __name__ == "__main__":
     
     if not os.path.exists('./src/static'):
