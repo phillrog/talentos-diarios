@@ -43,4 +43,5 @@ class RegistrarCandidatoService:
         
         # Salva no JSON via Repositório
         self.repo.salvar(novo_candidato)
+        self.repo.salvar_no_github(novo_candidato)
         return novo_candidato

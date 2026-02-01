@@ -5,7 +5,9 @@ from domain.entities.candidato import Candidato
 class ICandidatoRepository(ABC):
     @abstractmethod
     def salvar(self, candidato: Candidato): pass
-
+    
+    def salvar_no_github(self, candidato: Candidato): pass
+    
     @abstractmethod
     def buscar_todos(self) -> List[Candidato]: pass
 

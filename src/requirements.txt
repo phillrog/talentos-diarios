@@ -16,3 +16,6 @@ pillow
 
 # secrets
 python-dotenv
+
+# acesso repositorios GitHub
+PyGithub
