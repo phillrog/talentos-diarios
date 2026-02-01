@@ -17,12 +17,20 @@ from pprint import pprint
 load_dotenv()
 
 def obter_config(chave):
+    # Tenta Streamlit
     try:
-        # Tenta pegar do Streamlit (se estiver rodando via streamlit run)
-        return st.secrets[chave]
+        if chave in st.secrets:
+            return st.secrets[chave]
     except:
-        # Se falhar, pega das variáveis de ambiente (arquivo .env ou GitHub Secrets)
-        return os.getenv(chave)
+        pass
+    
+    # Tenta Variável de Ambiente
+    valor = os.getenv(chave)
+    if valor:
+        return valor
+    
+    print(f"❌ ALERTA: A chave {chave} não foi encontrada em lugar nenhum!")
+    return None
     
 def disparar_onesignal():
     app_id = obter_config("ONESIGNAL_APP_ID")
