@@ -204,5 +204,5 @@ class GeradorPDFService(IDocumentoService):
                 pdf.set_text_color(*COLOR_BG)
                 pdf.cell(largura_card, 5, "VER PERFIL", link=c['perfil_url'], align='C')
 
-        pdf.output("talentos_diarios.pdf")
+        pdf.output("./src/static/talentos_diarios.pdf")
         print("✅ PDF ajustado com paginação e grid corrigido!")
