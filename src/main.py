@@ -1,3 +1,17 @@
+import sys
+import os
+from pathlib import Path
+
+# Isso garante que o Python olhe dentro da pasta 'src' para achar 'infrastructure'
+file_path = Path(__file__).resolve()
+src_path = file_path.parent
+root_path = src_path.parent
+
+if str(src_path) not in sys.path:
+    sys.path.append(str(src_path))
+if str(root_path) not in sys.path:
+    sys.path.append(str(root_path))
+    
 from infrastructure.repositories.candidato_repository import CandidatoRepository
 from infrastructure.external_api.linkedin.linkedin_service import LinkedInService
 from application.services.registrar_candidato_service import RegistrarCandidatoService
