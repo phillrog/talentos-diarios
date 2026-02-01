@@ -30,6 +30,30 @@ def obter_id():
         print(f"Seu ID real para o secrets: {user_id}")
     else:
         print(f"Erro: {response.status_code} - {response.text}")
+        
+def disparar_onesignal():
+
+    app_id = os.getenv("ONESIGNAL_APP_ID")
+    api_key = os.getenv("ONESIGNAL_REST_API_KEY")
+    template_id = os.getenv("ONESIGNAL_TEMPLATE_ID")
+
+    if not app_id or not api_key:
+        print("⚠️ OneSignal ignorado: Chaves não encontradas.")
+        return
+
+    url = "https://onesignal.com/api/v1/notifications"
+    headers = {
+        "Authorization": f"Basic {api_key}",
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    payload = {
+        "app_id": app_id,
+        "template_id": template_id,
+        "included_segments": ["All"]
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    print(f"📡 OneSignal: {response.status_code} - {response.text}")        
 
 if __name__ == "__main__":
     
@@ -42,15 +66,9 @@ if __name__ == "__main__":
     
     # Dependência de Publicação
     publicador = None
-    # try:
-    #     token = obter_config("LINKEDIN_PAGE_ACCESS_TOKEN")
-    #     org_id = obter_config("LINKEDIN_ORG_ID")
-        
-    #     if token and org_id:
-    #         publicador = LinkedInPublisherService(token, org_id)
-    # except Exception:
-    #     print("Aviso: Secrets do LinkedIn não encontrados.")
         
     # Orquestração
     app = JornalDiarioService(repo, saidas, publicador)
     app.processar_edicao_do_dia()
+    
+    disparar_onesignal()
