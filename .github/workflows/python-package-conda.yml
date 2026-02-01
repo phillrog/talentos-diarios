@@ -36,7 +36,7 @@ jobs:
           LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
           APP_URL: "https://talentos-diarios.streamlit.app"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python .\src\jobs\run_job.py
+        run: python src/jobs/run_job.py
 
       - name: 5. Salvar Mudanças no GitHub (Commit & Push)
         run: |
