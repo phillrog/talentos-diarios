@@ -38,7 +38,6 @@ def renderizar_interface(registrar_service, auth_service):
         if st.button("Ativar Notificações no Navegador", use_container_width=True):
             components.html(
                 """
-                <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
                 <script>
                 window.OneSignalDeferred = window.OneSignalDeferred || [];
                 window.OneSignalDeferred.push(async function(OneSignal) {
