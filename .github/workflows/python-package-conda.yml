@@ -31,6 +31,13 @@ jobs:
           # Se o requirements existir, instala o resto
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: 3.5 Instalar Locales (Português)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y locales
+          sudo locale-gen pt_BR.UTF-8
+          sudo update-locale LANG=pt_BR.UTF-8
+
       - name: 4. Executar Orquestrador (Main)
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/src
