@@ -15,18 +15,7 @@ def renderizar_interface(registrar_service, auth_service):
         OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
             appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
-            allowLocalhostAsSecureOrigin: true,
-            notifyButton: {
-                enable: true,
-                position: 'bottom-right',
-                size: 'medium'
-            },
-            serviceWorkerParam: { scope: "/" },
-            serviceWorkerPath: "assets/js/OneSignalSDKWorker.js",
             });
-            if (!OneSignal.Notifications.permission) {
-                OneSignal.Slidedown.promptPush();
-            }
         });
         </script>
         """,
