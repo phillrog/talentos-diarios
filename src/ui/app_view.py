@@ -2,23 +2,27 @@ import streamlit as st
 import urllib.parse
 import streamlit.components.v1 as components
 
-
+if "onesignal_injetado" not in st.session_state:
+    components.html(
+        """
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+        <script>
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          window.OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+              appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
+            });
+          });
+        </script>
+        """,
+        height=0,
+    )
+    st.session_state["onesignal_injetado"] = True
+    
 def renderizar_interface(registrar_service, auth_service):
     st.set_page_config(page_title="Talentos Diários", page_icon="📰")        
     
-    st.write("---")
-    st.subheader("🔔 Receba Alertas de Vagas")
-    st.write("O Streamlit bloqueia notificações diretas. Clique no botão abaixo para abrir a página de inscrição oficial:")
-
-    # Este link usa o seu App ID e abre a página de "emergência" que o OneSignal cria
-    link_inscricao = "https://66267c67-6b67-4742-a72d-25c884d2fe17.os.tc/subscribe"
-
-    if st.button("Configurar Notificações", use_container_width=True, type="primary"):
-        # Abre o link em uma nova aba para garantir que o domínio seja aceito
-        js = f"window.open('{link_inscricao}', '_blank');"
-        st.components.v1.html(f"<script>{js}</script>", height=0)
-        st.success("Página de inscrição aberta em uma nova aba!")
-    
+        
     st.title("📰 Talentos Diários")
     st.subheader("Sua vitrine diária para o mercado de trabalho")
 
