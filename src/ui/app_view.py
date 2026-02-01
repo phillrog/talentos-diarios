@@ -1,24 +1,7 @@
 import streamlit as st
 import urllib.parse
-import streamlit.components.v1 as components
 
-if "onesignal_injetado" not in st.session_state:
-    components.html(
-        """
-        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-        <script>
-          window.OneSignalDeferred = window.OneSignalDeferred || [];
-          window.OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-              appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
-            });
-          });
-        </script>
-        """,
-        height=0,
-    )
-    st.session_state["onesignal_injetado"] = True
-    
+
 def renderizar_interface(registrar_service, auth_service):
     st.set_page_config(page_title="Talentos Diários", page_icon="📰")        
     
