@@ -31,6 +31,7 @@ jobs:
 
       - name: 4. Executar Orquestrador (Main)
         env:
+          PYTHONPATH: .
           # Variáveis para o seu obter_config() funcionar no Actions
           LINKEDIN_PAGE_ACCESS_TOKEN: ${{ secrets.LINKEDIN_PAGE_ACCESS_TOKEN }}
           LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
