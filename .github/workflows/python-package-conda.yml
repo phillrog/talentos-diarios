@@ -46,6 +46,9 @@ jobs:
           LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
           APP_URL: "https://talentos-diarios.streamlit.app"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+          ONESIGNAL_TEMPLATE_ID: ${{ secrets.ONESIGNAL_TEMPLATE_ID }}
         run: python src/jobs/run_job.py
 
       - name: 5. Salvar Mudanças no GitHub (Commit & Push)
