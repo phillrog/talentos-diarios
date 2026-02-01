@@ -1,6 +1,6 @@
 import streamlit as st
 import urllib.parse
-
+import streamlit.components.v1 as components
 
 def renderizar_interface(registrar_service, auth_service):
     st.set_page_config(page_title="Talentos Diários", page_icon="📰")        
@@ -33,9 +33,28 @@ def renderizar_interface(registrar_service, auth_service):
             except Exception as e:
                 st.error(f"Erro no registro: {e}")
 
+    with st.expander("🔔 Receber alertas de novos candidatos"):
+        st.write("Deseja ser avisado quando o jornal for atualizado?")
+        if st.button("Ativar Notificações no Navegador", use_container_width=True):
+            components.html(
+                """
+                <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+                <script>
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                window.OneSignalDeferred.push(async function(OneSignal) {
+                    await OneSignal.init({
+                        appId: "66267c67-6b67-4742-a72d-25c884d2fe17",
+                    });
+                    OneSignal.Notifications.requestPermission();
+                });
+                </script>
+                """,
+                height=0,
+            )
+            st.success("Verifique a barra de endereços para permitir!")
     # Área de Registro
     with st.container(border=True):
-        st.write("### 🚀 Apareça no próximo jornal")
+        st.write("### 🚀 Apareça para os recrutadores")
         
         cargo_digitado = st.text_input(
             "Qual seu cargo ou especialidade?", 
