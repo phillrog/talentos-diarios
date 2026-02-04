@@ -48,6 +48,27 @@ jobs:
           ONESIGNAL_TEMPLATE_ID: ${{ secrets.ONESIGNAL_TEMPLATE_ID }}
         run: python src/jobs/run_job.py
 
+      - name: 4.5 Notificar OneSignal via REST API
+        if: success()
+        run: |
+          curl --request POST \
+            --url https://onesignal.com/api/v1/notifications \
+            --header 'Authorization: Basic ${{ secrets.ONESIGNAL_REST_API_KEY }}' \
+            --header 'Content-Type: application/json; charset=utf-8' \
+            --data '{
+              "app_id": "${{ secrets.ONESIGNAL_APP_ID }}",
+              "included_segments": ["Total Subscriptions"],
+              "headings": {
+                "en": "New Talents Available! 🚀",
+                "pt": "Novos Talentos Disponíveis! 🚀"
+              },
+              "contents": {
+                "en": "The daily list has been updated with new #OpenToWork candidates.",
+                "pt": "A lista diária foi atualizada com novos candidatos #OpenToWork."
+              },
+              "url": "https://talentos-diarios-portal.vercel.app"
+            }'
+
       - name: 5. Salvar Mudanças no GitHub (Commit & Push)
         run: |
           git config --global user.name 'GitHub Action Bot'
