@@ -104,8 +104,8 @@ def get_custom_css(logo_html):
 
         /* 5. Botão Primário Imponente */
         .stButton>button {{
-            background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%) !important;
-            color: white !important;
+            color: rgb(49, 51, 63) !important;
+            background-color: #fff !important;
             border: none !important;
             padding: 1.2rem 2rem !important;
             font-weight: 800 !important;
@@ -122,6 +122,7 @@ def get_custom_css(logo_html):
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5) !important;
             background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: #fff !important;
         }}
 
         /* 6. Ajustes de Layout e Main Container */
@@ -154,6 +155,38 @@ def get_custom_css(logo_html):
             text-align: center;
             font-weight: 500;
         }}
+        
+            
+        .stLinkButton > a {{
+            color: #fff !important; /* Texto branco como padrão já que terá gradiente */
+            background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%) !important;
+            border: none !important;
+            padding: 1.2rem 2rem !important;
+            font-weight: 800 !important;
+            font-size: 1.1rem !important;
+            border-radius: 2rem !important;
+            transition: all 0.3s ease !important;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            display: flex; /* Garante que o conteúdo fique centralizado */
+            justify-content: center;
+            align-items: center;
+            text-decoration: none !important; /* Remove sublinhado de link */
+        }}
+
+        /* Hover para o Botão de Link */
+        .stLinkButton > a:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5) !important;
+            filter: brightness(1.1); /* Dá um leve brilho no hover */
+            color: #fff !important;
+        }}
+
+        .stLinkButton span {{
+            color: #fff !important;
+        }}
         </style>
 
         <div class="custom-header">
@@ -166,6 +199,7 @@ def get_custom_css(logo_html):
                 <div class="typing-text">Open To Work _</div>
             </div>
         </div>
+        
     """
 
 def get_footer_html():
