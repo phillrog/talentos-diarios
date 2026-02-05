@@ -6,6 +6,12 @@ on:
     - cron: '0 9 * * *'
   workflow_dispatch: # Permite rodar manualmente pelo botão "Run workflow" no GitHub
 
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/static/**' # O Workflow SÓ dispara se houver mudança nesta pasta
+
 permissions:
   contents: write # Permissão CRUCIAL para o robô dar push no feed.xml e candidatos.json
 
