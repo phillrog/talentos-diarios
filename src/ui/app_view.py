@@ -80,7 +80,7 @@ def renderizar_interface(registrar_service, auth_service):
             st.markdown("""
                 <div class="vitrine-link-container">
                     <a href="https://talentos-diarios-portal.vercel.app" target="_blank" class="vitrine-link">
-                        🔍 Clique aqui para visualizar a vitrine
+                        🔍 Clique aqui para visualizar talentos disponíveis
                     </a>
                 </div>
             """, unsafe_allow_html=True)
