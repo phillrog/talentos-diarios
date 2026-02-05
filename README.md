@@ -47,6 +47,8 @@ Obs: O registro dura 30 dias em seguida é descartado.
 ]
 ```
 
+⚠️ Disclaimer Este projeto é uma iniciativa de estudo e portfólio. O cadastro e a exibição na vitrine visam complementar sua visibilidade, não garantindo contratações ou propostas.
+
 ## 🔐 Autenticação e Privacidade
 
 A segurança e a privacidade dos dados dos candidatos são prioridades neste projeto. Utilizamos o protocolo **OAuth 2.0** com o fluxo **OpenID Connect** para garantir uma integração segura com o LinkedIn.
