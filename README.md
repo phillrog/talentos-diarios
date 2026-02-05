@@ -1,5 +1,8 @@
 # 🚀 Talentos Diários - Registrar
 
+<img width="1917" height="964" alt="Captura de tela 2026-02-05 054030" src="https://github.com/user-attachments/assets/9d6967fb-e155-41d5-82db-d2335e8463fd" />
+
+
 Uma plataforma automatizada para conectar profissionais #OpenToWork a recrutadores, com geração notificações em tempo real.
 
 ## 🛠️ Tecnologias Utilizadas
@@ -53,6 +56,9 @@ Solicitamos apenas as permissões mínimas necessárias para o funcionamento do 
 - `openid`: Identificação do usuário.
 - `profile`: Acesso ao nome e foto de perfil utilizar no portal e no PDF.
 - `email`: Utilizado apenas para o linkedin fazer o redirecionamento de volta para página.
+
+<img width="479" height="782" alt="Captura de tela 2026-02-05 054101" src="https://github.com/user-attachments/assets/a7a89f08-5cc5-4df3-beb3-0aa02200a34b" />
+
 
 ## IMPORTANTE: 
 Nenhum dado além deste é salvo ou lido. 
@@ -122,3 +128,11 @@ Obs: Onesignal só funciona com https.
 * * * * *
 
 # Resultado
+
+<img width="1917" height="964" alt="Captura de tela 2026-02-05 054030" src="https://github.com/user-attachments/assets/9d6967fb-e155-41d5-82db-d2335e8463fd" />
+
+<img width="1912" height="960" alt="Captura de tela 2026-02-05 054141" src="https://github.com/user-attachments/assets/1b92db02-3c65-436f-83b2-8719ceaa0c8c" />
+
+<img width="430" height="411" alt="image" src="https://github.com/user-attachments/assets/ef7e9764-9000-4d9c-aed9-83baeb52f0a6" />
+
+
