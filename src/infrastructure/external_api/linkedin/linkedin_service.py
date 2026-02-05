@@ -18,7 +18,7 @@ class LinkedInService(IAuthService):
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
-            "scope": "openid profile email",
+            "scope": "openid profile",
             "state": state_combinado
         }
         request_url = requests.Request("GET", self.auth_url, params=params).prepare().url
