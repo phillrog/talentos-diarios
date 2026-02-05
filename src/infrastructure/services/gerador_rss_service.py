@@ -14,13 +14,13 @@ class GeradorRSSService(IDocumentoService):
 
         for c in candidatos:
             fe = fg.add_entry()
-            fe.title(f"{c['cargo']} - {c['nome']}")
-            fe.link(href=c['perfil_url'])
+            fe.title(f"{c.cargo} - {c.nome}")
+            fe.link(href=c.perfil_url)
             
             timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-            fe.id(f"{c['perfil_url']}?v={timestamp}")                         
+            fe.id(f"{c.perfil_url}?v={timestamp}")                         
             
-            fe.description(f"Candidato(a) encontrado {c['cargo']}. Confira o perfil completo no link.")
+            fe.description(f"Candidato(a) encontrado {c.cargo}. Confira o perfil completo no link.")
             
             fe.pubDate(datetime.now().astimezone())                    
             

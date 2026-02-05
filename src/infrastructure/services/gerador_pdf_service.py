@@ -145,7 +145,7 @@ class GeradorPDFService(IDocumentoService):
                 pdf.set_text_color(*COLOR_ACCENT)
                 
                 # Cargo
-                texto_cargo = c['cargo'][:80].upper()
+                texto_cargo = c.cargo[:80].upper()
                 largura_util = largura_card - 4
                 altura_linha = 3.5
                 
@@ -175,26 +175,52 @@ class GeradorPDFService(IDocumentoService):
                 pdf.rect(x + 2, y + 18, largura_card - 4, altura_card - 28, 'D')
 
                 # Foto 
-                if c.get('foto'):
+                if c.foto:
                     try:
-                        img_str = c['foto'].split(",")[1] if "," in c['foto'] else c['foto']
+                        # 1. Decodifica o Base64
+                        img_str = c.foto.split(",")[1] if "," in c.foto else c.foto
                         img_data = base64.b64decode(img_str)
-                        img_pill = Image.open(BytesIO(img_data)).convert("RGBA")
-                        img_pill = ImageOps.fit(img_pill, (200, 200), centering=(0.5, 0.5))
-                        mask = Image.new('L', img_pill.size, 0)
+                        
+                        # 2. Processa com Pillow de forma segura
+                        img_pill = Image.open(BytesIO(img_data))
+                        
+                        # Converte para RGB removendo transparência (essencial para PDF)
+                        if img_pill.mode in ("RGBA", "P"):
+                            background = Image.new("RGB", img_pill.size, COLOR_CARD)
+                            background.paste(img_pill, mask=img_pill.split()[3] if img_pill.mode == "RGBA" else None)
+                            img_pill = background
+                        else:
+                            img_pill = img_pill.convert("RGB")
+
+                        # 3. Cria a máscara circular e faz o Crop
+                        size = (200, 200)
+                        img_pill = ImageOps.fit(img_pill, size, centering=(0.5, 0.5))
+                        mask = Image.new('L', size, 0)
                         draw = ImageDraw.Draw(mask)
-                        draw.ellipse((0, 0, 200, 200), fill=255)
-                        img_circ = Image.new("RGB", img_pill.size, COLOR_CARD)
+                        draw.ellipse((0, 0) + size, fill=255)
+                        
+                        # 4. Finaliza a imagem redonda
+                        img_circ = Image.new("RGB", size, COLOR_CARD)
                         img_circ.paste(img_pill, mask=mask)
 
-                        pdf.image(img_circ, x=x+18, y=y+21, w=20)
-                    except: pass
+                        # 5. SALVA TEMPORARIAMENTE (O segredo para o GitHub Actions)
+                        temp_filename = f"temp_user_{i}.jpg"
+                        img_circ.save(temp_filename, "JPEG", quality=95)
+
+                        # 6. Insere no PDF usando o caminho do arquivo
+                        pdf.image(temp_filename, x=x+18, y=y+21, w=20)
+                        
+                        # 7. Remove o arquivo para não encher o runner
+                        os.remove(temp_filename)
+                        
+                    except Exception as e:
+                        print(f"Erro ao processar foto do candidato {c.nome}: {e}")
 
                 # Nome
                 pdf.set_xy(x + 3, y + 43)
                 pdf.set_font("Helvetica", 'B', 11)
                 pdf.set_text_color(*COLOR_TEXT)
-                pdf.multi_cell(largura_card - 6, 4.5, c['nome'].title(), align='C')
+                pdf.multi_cell(largura_card - 6, 4.5, c.nome.title(), align='C')
 
                 # Botão
                 pdf.set_fill_color(*COLOR_ACCENT)
@@ -202,7 +228,7 @@ class GeradorPDFService(IDocumentoService):
                 pdf.set_xy(x, y + altura_card - 8)
                 pdf.set_font("Helvetica", 'B', 10)
                 pdf.set_text_color(*COLOR_BG)
-                pdf.cell(largura_card, 5, "VER PERFIL", link=c['perfil_url'], align='C')
+                pdf.cell(largura_card, 5, "VER PERFIL", link=c.perfil_url, align='C')
 
         pdf.output("./src/static/talentos_diarios.pdf")
         print("✅ PDF ajustado com paginação e grid corrigido!")
