@@ -1,253 +1,141 @@
 def get_custom_css(logo_html):
     """
-    Retorna o CSS global e o HTML do cabeçalho personalizado.
+    Retorna o CSS global e o HTML do cabeçalho estilo SaaS Moderno (Inhire).
     """
     return f"""
         <style>
-        /* 1. Configurações Globais e Fontes */
-        html, body, [class*="st-"] {{
-            font-size: 1.05rem;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* 1. Configurações Globais */
+        html, body {{
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }}
+        
+        .stMainBlockContainer.block-container{{
+            padding: 0 !important;
         }}
 
-        .stApp, .stAppHeader {{
-            background-color: #020617;
-            color: #f8f9fa;
+        .stApp {{
+            background-color: #f8fafc;
+            color: #1e293b;
         }}
 
-        /* 2. Cabeçalho Customizado (Glassmorphism) */
+        /* 2. Cabeçalho Minimalista */
         .custom-header {{
             display: flex;
             align-items: center;
-            padding: 2.5rem 10%;
-            background: rgba(2, 6, 23, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 3.5rem;
+            justify-content: center;
+            padding: 2.5rem 0;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 3rem;
+            font-size: 4rem;
         }}
 
         .logo-box {{
-            background: linear-gradient(135deg, #1e293b 0%, #020617 100%);
-            padding: 15px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.35);
             display: flex;
             align-items: center;
-            justify-content: center;
-            scale: 1.5;
+            gap: 15px;
         }}
 
-        .logo-img {{ width: 60px; height: 60px; object-fit: contain; }}
+        .logo-img {{ width: 124px; object-fit: contain; }}
         
-        .title-container {{ margin-left: 28px; line-height: 0.85; font-size: 3rem; }}
-        
-        .title-main {{ font-size: 3.5rem; font-weight: 900; color: white; margin: 0; letter-spacing: -2px; }}
-        .title-sub {{ 
-            font-size: 3.5rem; font-weight: 900; color: #3b82f6; margin: 0; letter-spacing: -2px; 
-            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5)); 
+        .header-text {{ line-height: 1; }}
+        .title-main {{ 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: #0f172a; 
+            margin: 0; 
+            letter-spacing: -1px;
         }}
+        .title-main span {{ color: #2563eb; }}
         
         .typing-text {{
-            color: #10b981; font-size: 15px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 0.35em; margin-top: 15px; display: flex; align-items: center; gap: 10px;
+            color: #64748b; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.2em; 
+            margin-top: 5px;
         }}
-        .typing-text::before {{ content: ""; width: 30px; height: 2px; background: #3b82f6; display: inline-block; }}
 
-        /* 3. Estilização do Card do Formulário */
+        /* 3. Card do Formulário */
         [data-testid="stVerticalBlockBorderWrapper"] {{
-            background-color: #0e162b !important;
-            border: 1px solid rgba(255,255,255,0.08) !important;
-            border-radius: 24px !important;
-            padding: 25px !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 30px !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
         }}
 
-        /* 4. Estilização dos Inputs (Efeito Glow & Rounded) */
+        /* 4. Inputs Estilizados */
         div[data-baseweb="input"] {{
-            background-color: rgba(15, 23, 42, 0.9) !important;
-            border: 2px solid #1e293b !important;
-            border-radius: 2rem !important;
-            padding: 12px 24px !important;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            transition: all 0.2s ease !important;
         }}
 
         div[data-baseweb="input"]:focus-within {{
             border-color: #3b82f6 !important;
-            box-shadow: 0 0 40px rgba(37, 99, 235, 0.15) !important;
-            transform: translateY(-2px);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
         }}
 
-        input {{ 
-            color: #46556a !important; 
-            font-size: 1.4rem !important;
-            font-weight: 500 !important;
-        }}
+        input {{ color: #1e293b !important; font-size: 1rem !important; }}
         
-        input::placeholder {{
-            color: #334155 !important;
-            font-size: 1.1rem;
-        }}
-
-        div[data-baseweb="input"] > div {{
-            border: none !important;
-            background-color: transparent !important;
-        }}
-
         label p {{
-            color: #46556a !important;
-            font-weight: 700 !important;
-            font-size: 1.1rem !important;
-            margin-bottom: 12px !important;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: #475569 !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            text-transform: none !important;
         }}
 
-        /* 5. Botão Primário Imponente */
-        .stButton>button {{
-            color: rgb(49, 51, 63) !important;
-            background-color: #fff !important;
+        /* 5. Botão LinkedIn (Cor Oficial) */
+        .stLinkButton > a, .stButton>button {{
+            background-color: #0077b5 !important;
+            color: #ffffff !important;
             border: none !important;
-            padding: 1.2rem 2rem !important;
-            font-weight: 800 !important;
-            font-size: 1.1rem !important;
-            border-radius: 2rem !important;
-            transition: all 0.3s ease !important;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
+            border-radius: 8px !important;
+            padding: 0.6rem 1rem !important;
+            font-weight: 600 !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            transition: all 0.2s ease !important;
         }}
         
-        .stButton>button:hover {{
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5) !important;
-            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%) !important;
-            color: #fff !important;
+        .stLinkButton > a:hover, .stButton>button:hover {{
+            background-color: #005a87 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
         }}
 
-        /* 6. Ajustes de Layout e Main Container */
-        div[data-testid="stLayoutWrapper"] div[data-testid="stLayoutWrapper"] {{
-            background-color: #0e162b !important;
-        }}
+        /* Esconder decorações padrão */
+        #MainMenu, footer, header {{visibility: hidden;}}
         
-        div[data-testid="stMainBlockContainer"] {{
-            padding: 1rem !important;
-        }}
-
-        /* Esconder decorações padrão do Streamlit */
-        #MainMenu {{visibility: hidden;}}
-        footer {{visibility: hidden;}}
-        header {{visibility: hidden;}}
-        
-            
         .disclaimer-box {{
             margin-top: 25px;
-            padding: 15px 20px;
-            border-radius: 1rem;
-            background: rgba(30, 41, 59, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f5f9;
         }}
-        .disclaimer-text {{
-            color: #46556a;
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin: 0;
-            text-align: center;
-            font-weight: 500;
-        }}
-        
-            
-        .stLinkButton > a {{
-            color: #fff !important; /* Texto branco como padrão já que terá gradiente */
-            background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%) !important;
-            border: none !important;
-            padding: 1.2rem 2rem !important;
-            font-weight: 800 !important;
-            font-size: 1.1rem !important;
-            border-radius: 2rem !important;
-            transition: all 0.3s ease !important;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            display: flex; /* Garante que o conteúdo fique centralizado */
-            justify-content: center;
-            align-items: center;
-            text-decoration: none !important; /* Remove sublinhado de link */
-        }}
-
-        /* Hover para o Botão de Link */
-        .stLinkButton > a:hover {{
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5) !important;
-            filter: brightness(1.1); /* Dá um leve brilho no hover */
-            color: #fff !important;
-        }}
-
-        .stLinkButton span {{
-            color: #fff !important;
-        }}
+        .disclaimer-text {{ color: #64748b; font-size: 0.8rem; text-align: center; }}
         </style>
 
         <div class="custom-header">
             <div class="logo-box">
                 <img src="{logo_html}" class="logo-img">
-            </div>
-            <div class="title-container">
-                <p class="title-main">TALENTOS</p>
-                <p class="title-sub">DIÁRIOS</p>
-                <div class="typing-text">Open To Work _</div>
+                <div class="header-text">
+                    <p class="title-main">TALENTOS <span>DIÁRIOS</span></p>
+                    <div class="typing-text">Sua vitrine profissional</div>
+                </div>
             </div>
         </div>
-        
     """
 
 def get_footer_html():
-    """
-    Retorna o HTML do rodapé minimalista estilizado.
-    """
     return """
-        <style>
-        .footer-container {
-            width: 100%;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .footer-text {
-            color: #46556a;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-        .footer-text:hover {
-            opacity: 1;
-            color: #3b82f6;
-        }
-        
-        .vitrine-link-container {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-        }
-        .vitrine-link {
-            color: #3b82f6 !important;
-            font-weight: 800;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-        }
-        .vitrine-link:hover {
-            color: #10b981 !important;
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-        }
-        </style>
-        
-        <div class="footer-container">
-            <p class="footer-text">Talentos Diários • 2026</p>
+        <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 0.8rem; font-weight: 500;">
+            Talentos Diários • 2026
         </div>
     """
