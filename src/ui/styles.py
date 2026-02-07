@@ -127,7 +127,7 @@ def get_custom_css(logo_html):
                 <img src="{logo_html}" class="logo-img">
                 <div class="header-text">
                     <p class="title-main">TALENTOS <span>DIÁRIOS</span></p>
-                    <div class="typing-text">Sua vitrine profissional</div>
+                    <div class="typing-text" style="color: green;">#OpenToWork</div>
                 </div>
             </div>
         </div>
