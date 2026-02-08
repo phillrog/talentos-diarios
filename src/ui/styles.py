@@ -120,6 +120,12 @@ def get_custom_css(logo_html):
             background: #f1f5f9;
         }}
         .disclaimer-text {{ color: #64748b; font-size: 0.8rem; text-align: center; }}
+        
+        #linkedin-button:hover{{
+            background-color: #005a87 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2) !important;
+        }}
         </style>
 
         <div class="custom-header">

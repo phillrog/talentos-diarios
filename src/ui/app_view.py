@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import urllib.parse
+import base64
 from ui.helpers import get_base64_of_bin_file
 from ui.styles import get_custom_css, get_footer_html
 
@@ -12,16 +13,22 @@ def renderizar_interface(registrar_service, auth_service):
         layout="wide"
     )
 
-    # 2. Logo
+    # 2. Caminhos de Imagens
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     LOGO_PATH = os.path.join(BASE_DIR, "assets", "images", "logo.png")
+    LINKEDIN_ICON_PATH = os.path.join(BASE_DIR, "assets", "images", "linkedin.svg")
+    
+    # 3. Processamento de Logos e Ícones
     logo_b64 = get_base64_of_bin_file(LOGO_PATH)
     logo_html = f'data:image/png;base64,{logo_b64}' if logo_b64 else ""
+    
+    linkedin_b64 = get_base64_of_bin_file(LINKEDIN_ICON_PATH)
+    linkedin_icon_data = f'data:image/svg+xml;base64,{linkedin_b64}' if linkedin_b64 else ""
 
-    # 3. Injeção de CSS
+    # 4. Injeção de CSS
     st.markdown(get_custom_css(logo_html), unsafe_allow_html=True)
 
-    # 4. Callback LinkedIn (Mantido original)
+    # 5. Callback LinkedIn (Mantido original)
     params = st.query_params
     if "code" in params:
         with st.spinner("🚀 Finalizando seu registro..."):
@@ -38,7 +45,7 @@ def renderizar_interface(registrar_service, auth_service):
             except Exception as e:
                 st.error(f"Erro no registro: {e}")
 
-    # 5. Formulário Centralizado
+    # 6. Formulário Centralizado
     _, col_form, _ = st.columns([1, 1.5, 1])
 
     with col_form:
@@ -58,11 +65,59 @@ def renderizar_interface(registrar_service, auth_service):
             
             st.markdown("<br>", unsafe_allow_html=True)
             
+            # 7. Botão Customizado com Ícone LinkedIn
             if cargo_digitado and link_perfil:
                 url_final = auth_service.obter_url_login(cargo_digitado, link_perfil)
-                st.link_button("CADASTRAR VIA LINKEDIN", url_final, use_container_width=True)
+                
+                st.markdown(f"""
+                    <a href="{url_final}" target="_self" style="text-decoration: none;">
+                        <div id="linkedin-button"
+                            style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            background-color: #0077b5;
+                            color: white;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            font-weight: 700;
+                            font-size: 0.9rem;
+                            transition: background-color 0.3s;
+                            border: none;
+                            cursor: pointer;
+                            width: 100%;
+                            text-align: center;
+                            box-sizing: border-box;
+                        "
+                        >                            
+                            Cadastrar via <img src="{linkedin_icon_data}" width="64" height="24" style="filter: brightness(0) invert(1);">
+                        </div>
+                    </a>
+                """, unsafe_allow_html=True)
             else:
-                st.button("CADASTRAR VIA LINKEDIN", use_container_width=True, disabled=True)
+                st.markdown(f"""
+                    <div
+                        onmouseover="this.style.backgroundColor='#005a87'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.2)';" 
+                        onmouseout="this.style.backgroundColor='#0077b5'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" 
+                        style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        background-color: #e2e8f0;
+                        color: #94a3b8;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        font-weight: 700;
+                        font-size: 0.9rem;
+                        width: 100%;
+                        cursor: not-allowed;
+                        box-sizing: border-box;
+                    ">
+                        Cadastrar via <img src="{linkedin_icon_data}" width="64" height="24" style="filter: brightness(0) invert(1);">
+                    </div>
+                """, unsafe_allow_html=True)
                 st.caption("Preencha os campos para continuar.")
                 
             st.markdown(f"""
@@ -73,7 +128,7 @@ def renderizar_interface(registrar_service, auth_service):
                 </div>
             """, unsafe_allow_html=True)
 
-    # 6. Rodapé e Disclaimer
+    # 8. Rodapé e Disclaimer
     st.markdown(get_footer_html(), unsafe_allow_html=True)
     st.markdown("""
         <div class="disclaimer-box">
