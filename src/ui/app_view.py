@@ -70,7 +70,7 @@ def renderizar_interface(registrar_service, auth_service):
                 url_final = auth_service.obter_url_login(cargo_digitado, link_perfil)
                 
                 st.markdown(f"""
-                    <a href="{url_final}" target="_top" style="text-decoration: none;">
+                    <a href="{url_final}" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
                         <div id="linkedin-button"
                             style="
                             display: flex;
