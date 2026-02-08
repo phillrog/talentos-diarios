@@ -1,6 +1,6 @@
 # 🚀 Talentos Diários - Registrar
 
-<img width="1917" height="964" alt="Captura de tela 2026-02-05 054030" src="https://github.com/user-attachments/assets/9d6967fb-e155-41d5-82db-d2335e8463fd" />
+<img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/fd857c4c-cde9-4ddb-ae6d-44a655bbcb76" />
 
 
 Uma plataforma automatizada para conectar profissionais #OpenToWork a recrutadores, com geração notificações em tempo real.
@@ -131,9 +131,14 @@ Obs: Onesignal só funciona com https.
 
 # Resultado
 
-<img width="1917" height="964" alt="Captura de tela 2026-02-05 054030" src="https://github.com/user-attachments/assets/9d6967fb-e155-41d5-82db-d2335e8463fd" />
+<img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/fd857c4c-cde9-4ddb-ae6d-44a655bbcb76" />
 
-<img width="1912" height="960" alt="Captura de tela 2026-02-05 054141" src="https://github.com/user-attachments/assets/1b92db02-3c65-436f-83b2-8719ceaa0c8c" />
+<img width="1308" height="643" alt="image" src="https://github.com/user-attachments/assets/7106547f-d2c4-4213-8505-6736cd40a7d1" />
+
+<img width="1312" height="645" alt="image" src="https://github.com/user-attachments/assets/af773010-d681-4dd0-91fe-88a9739e3471" />
+
+
+Quem tiver se inscrito no [portal](https://talentos-diarios-portal.vercel.app/)  receberá esta mensagem
 
 <img width="430" height="411" alt="image" src="https://github.com/user-attachments/assets/ef7e9764-9000-4d9c-aed9-83baeb52f0a6" />
 
