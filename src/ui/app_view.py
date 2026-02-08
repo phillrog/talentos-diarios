@@ -133,8 +133,9 @@ def renderizar_interface(registrar_service, auth_service):
     st.markdown("""
         <div class="disclaimer-box">
             <p class="disclaimer-text">
-                <b>💡 Nota:</b> Este é um projeto de portfólio. O cadastro aumenta sua visibilidade, 
-                mas não garante contratação direta.
+                <b>💡 Nota:</b> Este projeto é uma iniciativa de estudo e portfólio. 
+O cadastro e a exibição na vitrine visam complementar sua visibilidade, 
+não garantindo contratações ou propostas.
             </p>
         </div>
     """, unsafe_allow_html=True)
