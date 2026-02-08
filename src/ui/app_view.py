@@ -53,13 +53,13 @@ def renderizar_interface(registrar_service, auth_service):
             st.subheader("Cadastro de Candidato")
             
             cargo_digitado = st.text_input(
-                "Qual seu cargo ou especialidade?", 
+                "Qual seu cargo ou especialidade? *", 
                 placeholder="Ex: Desenvolvedor .NET | Designer UX",
                 key="cargo_usuario"
             )
             
             link_perfil = st.text_input(
-                "Link do seu perfil do LinkedIn", 
+                "Link do seu perfil do LinkedIn *", 
                 placeholder="https://www.linkedin.com/in/seu-perfil"
             )
             
@@ -118,7 +118,7 @@ def renderizar_interface(registrar_service, auth_service):
                         Cadastrar via <img src="{linkedin_icon_data}" width="64" height="24" style="filter: brightness(0) invert(1);">
                     </div>
                 """, unsafe_allow_html=True)
-                st.caption("Preencha os campos para continuar.")
+                st.caption("Preencha os campos com * para continuar.")
                 
             st.markdown(f"""
                 <div style="text-align: center; margin-top: 20px;">
